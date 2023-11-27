@@ -56,7 +56,7 @@ class SyncronizationData {
         "gender":contactList[i].gender,
         "created_at":contactList[i].createdAt,
       };
-      final response = await htpp.post('http://192.168.43.6/syncsqftomysqlflutter/load_from_sqflite_contactinfo_table_save_or_update_to_mysql.php',body: data);
+      final response = await htpp.post('http://192.168.43.6/syncsqftomysqlflutter/load_from_sqflite_contactinfo_table_save_or_update_to_mysql.php' as Uri,body: data);
       if (response.statusCode==200) {
         print("Saving Data ");
       }else{
@@ -89,7 +89,7 @@ class SyncronizationData {
         "gender":contactList[i]['gender'],
         "created_at":contactList[i]['created_at'],
       };
-      final response = await htpp.post('http://192.168.43.6/syncsqftomysqlflutter/load_from_sqflite_contactinfo_table_save_or_update_to_mysql.php',body: data);
+      final response = await htpp.post('http://192.168.43.6/syncsqftomysqlflutter/load_from_sqflite_contactinfo_table_save_or_update_to_mysql.php' as Uri,body: data);
       if (response.statusCode==200) {
         print("Saving Data ");
       }else{

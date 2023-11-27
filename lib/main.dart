@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:syncsqftomysql/contactinfomodel.dart';
 import 'package:syncsqftomysql/controller.dart';
 import 'package:syncsqftomysql/syncronize.dart';
@@ -70,6 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future syncToMysql()async{
       await SyncronizationData().fetchAllInfo().then((userList)async{
         EasyLoading.show(status: 'Dont close app. we are sync...');
+        print('userList');
+        print(userList.toString());
         await SyncronizationData().saveToMysqlWith(userList);
         EasyLoading.showSuccess('Successfully save to mysql');
       });
@@ -145,12 +148,15 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: RaisedButton(
+            child: BackButton(
               onPressed: () async{
+                final String dbPath = await getDatabasesPath();
+                print(dbPath);
                 ContactinfoModel contactinfoModel = ContactinfoModel(id: null,userId: 1,name: name.text,email: email.text,gender: gender.text,createdAt: DateTime.now().toString());
                 await Controller().addData(contactinfoModel).then((value){
                   if (value>0) {
                     print("Success");
+                    print(dbPath);
                     userList();
                   }else{
                     print("faild");
@@ -158,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   
                 });
               },
-              child: Text("Save"),
+              // child: Text("Save"),
             ),
           ),
           loading ?Center(child: CircularProgressIndicator()):Expanded(

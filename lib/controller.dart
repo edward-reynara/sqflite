@@ -8,13 +8,13 @@ import 'databasehelper.dart';
 class Controller {
   final conn = SqfliteDatabaseHelper.instance;
 
-  static Future<bool> isInternet()async{
+  static Future<bool> isInternet() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
       if (await DataConnectionChecker().hasConnection) {
         print("Mobile data detected & internet connection confirmed.");
         return true;
-      }else{
+      } else {
         print('No internet :( Reason:');
         return false;
       }
@@ -22,43 +22,48 @@ class Controller {
       if (await DataConnectionChecker().hasConnection) {
         print("wifi data detected & internet connection confirmed.");
         return true;
-      }else{
+      } else {
         print('No internet :( Reason:');
         return false;
       }
-    }else {
-      print("Neither mobile data or WIFI detected, not internet connection found.");
+    } else {
+      print(
+          "Neither mobile data or WIFI detected, not internet connection found.");
       return false;
     }
   }
 
-  Future<int> addData(ContactinfoModel contactinfoModel)async{
+  Future<int> addData(ContactinfoModel contactinfoModel) async {
     var dbclient = await conn.db;
     int result;
     try {
-      result = await dbclient.insert(SqfliteDatabaseHelper.contactinfoTable, contactinfoModel.toJson());
+      result = await dbclient.insert(
+          SqfliteDatabaseHelper.contactinfoTable, contactinfoModel.toJson());
     } catch (e) {
       print(e.toString());
     }
     return result;
   }
 
-  Future<int> updateData(ContactinfoModel contactinfoModel)async{
+  Future<int> updateData(ContactinfoModel contactinfoModel) async {
     var dbclient = await conn.db;
     int result;
     try {
-      result = await dbclient.update(SqfliteDatabaseHelper.contactinfoTable, contactinfoModel.toJson(),where: 'id=?',whereArgs: [contactinfoModel.id]);
+      result = await dbclient.update(
+          SqfliteDatabaseHelper.contactinfoTable, contactinfoModel.toJson(),
+          where: 'id=?', whereArgs: [contactinfoModel.id]);
     } catch (e) {
       print(e.toString());
     }
     return result;
   }
 
-  Future fetchData()async{
+  Future fetchData() async {
     var dbclient = await conn.db;
     List userList = [];
     try {
-      List<Map<String,dynamic>> maps = await dbclient.query(SqfliteDatabaseHelper.contactinfoTable,orderBy: 'id DESC');
+      List<Map<String, dynamic>> maps = await dbclient.query(
+          SqfliteDatabaseHelper.contactinfoTable, orderBy: 'id DESC');
       for (var item in maps) {
         userList.add(item);
       }
@@ -67,3 +72,4 @@ class Controller {
     }
     return userList;
   }
+}
